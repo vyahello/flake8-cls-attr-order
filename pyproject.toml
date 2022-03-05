@@ -1,0 +1,24 @@
+[tool.flake8]
+min_python_version = "3.7.0"
+max_complexity = 10
+max-line-length = 80
+statistics = true
+count = true
+eradicate-aggressive = true
+
+[tool.black]
+line-length = 80
+skip-string-normalization = true
+target-version = ["py37", "py38", "py39", "py310"]
+exclude = '''
+/(
+    \.pytest_cache
+    \.mypy_cache
+)/
+'''
+
+[tool.isort]
+profile = "black"
+
+[tool.check-manifest]
+ignore = [".gitignore"]
