@@ -6,6 +6,10 @@
 [![Checked with flake8](https://img.shields.io/badge/flake8-checked-blue)](http://flake8.pycqa.org/)
 [![Imports: isort](https://img.shields.io/badge/%20imports-isort-%231674b1?style=flat&labelColor=ef8336)](https://pycqa.github.io/isort/)
 [![License](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE.md)
+[![PyPI version shields.io](https://img.shields.io/pypi/v/flake8-cls-attr-order.svg)](https://pypi.org/project/flake8-cls-attr-order/)
+[![PyPI pyversions](https://img.shields.io/pypi/pyversions/flake8-cls-attr-order.svg)](https://pypi.org/project/flake8-cls-attr-order/)
+[![PyPi downloads](https://img.shields.io/pypi/dm/flake8-cls-attr-order.svg)](https://pypi.python.org/pypi/flake8-cls-attr-order)
+[![Downloads](https://pepy.tech/badge/flake8-cls-attr-order)](https://pepy.tech/project/flake8-cls-attr-order)
 [![EO principles respected here](https://www.elegantobjects.org/badge.svg)](https://www.elegantobjects.org)
 
 # flake8-cls-attr-order
