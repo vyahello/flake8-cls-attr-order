@@ -24,6 +24,7 @@
 - [isort](https://pycqa.github.io/isort)
 - [flake8](http://flake8.pycqa.org/en/latest/)
 - [pytest](https://docs.pytest.org/en/7.0.x/)
+- [bats](https://github.com/bats-core/bats-core)
 
 ## Usage
 
@@ -68,9 +69,18 @@ pip install -e .
 
 ### Testing 
 
-Please run the following script to start plugin tests:
+#### Unit tests
+
+Please run the following script to start plugin unit tests:
 ```bash
 pytest 
+```
+
+#### Package tests
+
+Please run the following script to start plugin package tests:
+```bash
+bats test-package.bats 
 ```
 
 ### CI

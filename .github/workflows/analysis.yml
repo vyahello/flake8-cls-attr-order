@@ -2,6 +2,10 @@ name: Python source code assessment 🐍
 on: [push]
 jobs:
   build:
+    env:
+       GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+       PACKAGE_NAME: "flake8-cls-attr-order"
+       PACKAGE_VERSION: "0.1.0"
     runs-on: ubuntu-latest
     strategy:
       max-parallel: 4
@@ -21,8 +25,11 @@ jobs:
       run: |
         pip install -r requirements-dev.txt
         ./analyse-source-code.sh
+    - name: Test package
+      run: |
+        sudo apt-get update -y
+        sudo apt-get install -y bats
+        ./test-package.bats
     - name: Upload coverage data to coveralls.io
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       run: |
         coveralls --service=github
