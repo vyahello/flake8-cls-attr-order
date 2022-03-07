@@ -39,6 +39,6 @@ DOC
 :<<DOC
   Test package help message
 DOC
-  flake8 --help | grep ${PACKAGE_NAME}
+  flake8 --help | grep "${PACKAGE_NAME}: ${PACKAGE_VERSION}"
   [ "$?" -eq 0 ]
 }
