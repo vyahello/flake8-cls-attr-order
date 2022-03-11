@@ -54,7 +54,8 @@ pip install -e .
 ### Codes
 
 - `CL100` - class name should start with upper case letter.
-- `CL200` - wrong class constants order.
+- `CL101` - wrong class constants order.
+- `CL200` - @staticmethod is detected, should be converted to function.
 
 ### Sample
 
@@ -64,12 +65,18 @@ pip install -e .
 class foo:
     BAR = ()
     ABRA = {}
+
+    def method(self): ...
+
+    @staticmethod
+    def meth(): ...
 ```
 
 ```bash
 flake8 cls.py
 cls.py:1:1: CL100 "foo" class name should start with upper case letter
-cls.py:1:1: CL200 wrong "foo" class constants order, should be "ABRA, BAR"
+cls.py:1:1: CL101 wrong "foo" class constants order, should be "ABRA, BAR"
+cls.py:8:5: CL200 "meth" @staticmethod is detected, move it to separate function
 ```
 
 

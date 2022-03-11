@@ -8,8 +8,15 @@ from flake8_cls_attr_order.meta import Meta
 _TIssues = List['Issue']
 _Tout = Generator[Tuple[int, int, str, Type[Any]], None, None]
 
+# class namespace
 CL100 = 'CL100 "{name}" class name should start with upper case letter'
-CL200 = 'CL200 wrong "{name}" class constants order, should be "{sv}"'
+CL101 = 'CL101 wrong "{name}" class constants order, should be "{sv}"'
+
+# methods namespace
+CL200 = (
+    'CL200 "{name}" @staticmethod is detected, '
+    'should be converted to function'
+)
 
 
 @dataclass
@@ -31,6 +38,22 @@ class ClassVisitor(ast.NodeVisitor):
         if isinstance(node, ast.ClassDef):
             self._check_cls_name(node)
             self._check_cls_attrib_order(node)
+            self._check_static_method(node)
+
+    def _check_static_method(self, node: ast.ClassDef) -> None:
+        for attrib in node.body:  # type: _ast.stmt
+            if isinstance(attrib, ast.FunctionDef):
+                decorator_list = attrib.decorator_list
+                if decorator_list:
+                    for dec_obj in decorator_list:
+                        if dec_obj.id == 'staticmethod':
+                            self._issues.append(
+                                Issue(
+                                    attrib.lineno,
+                                    attrib.col_offset,
+                                    message=CL200.format(name=attrib.name),
+                                )
+                            )
 
     def _check_cls_name(self, node: ast.ClassDef) -> None:
         if not node.name.istitle():
@@ -61,7 +84,7 @@ class ClassVisitor(ast.NodeVisitor):
                 Issue(
                     node.lineno,
                     node.col_offset,
-                    message=CL200.format(
+                    message=CL101.format(
                         name=node.name, sv=consts(sorted_const_line)
                     ),
                 )

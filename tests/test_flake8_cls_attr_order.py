@@ -3,7 +3,7 @@ from typing import Tuple
 
 import pytest
 
-from flake8_cls_attr_order.plugin import CL100, CL200, ClassAttrOrder
+from flake8_cls_attr_order.plugin import CL100, CL101, ClassAttrOrder
 
 pytestmark = pytest.mark.unit
 
@@ -41,6 +41,6 @@ def test_bad_cls_attrib_order():
         _out(
             line=1,
             column=1,
-            msg=CL200.format(name=_FOO, sv='ABRA, BAR'),
+            msg=CL101.format(name=_FOO, sv='ABRA, BAR'),
         ),
     )
