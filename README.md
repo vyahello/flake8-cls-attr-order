@@ -30,22 +30,9 @@
 - [pytest](https://docs.pytest.org/en/7.0.x/)
 - [bats](https://github.com/bats-core/bats-core)
 
-## Usage
+## Installation
 
-```python
-# cls.py
-
-class Foo:
-    BAR = ()
-    ABRA = {}
-```
-
-```bash
-flake8 cls.py
-cls.py:1:1: CL200 wrong "Foo" class constants order, should be "ABRA, BAR"
-```
-
-### Installation
+### PYPI
 
 ```bash
 pip install flake8-cls-attr-order
@@ -62,12 +49,32 @@ python3 -m venv venv
 pip install -e .
 ```
 
-**[⬆ back to top](#flake8-cls-attr-order)**
+## Errors
 
-## Warnings
+### Codes
 
 - `CL100` - class name should start with upper case letter.
 - `CL200` - wrong class constants order.
+
+### Sample
+
+```python
+# cls.py
+
+class foo:
+    BAR = ()
+    ABRA = {}
+```
+
+```bash
+flake8 cls.py
+cls.py:1:1: CL100 "foo" class name should start with upper case letter
+cls.py:1:1: CL200 wrong "foo" class constants order, should be "ABRA, BAR"
+```
+
+
+**[⬆ back to top](#flake8-cls-attr-order)**
+
 
 ## Development notes
 
