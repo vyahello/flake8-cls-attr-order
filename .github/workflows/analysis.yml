@@ -5,7 +5,7 @@ jobs:
     env:
        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
        PACKAGE_NAME: "flake8-cls-attr-order"
-       PACKAGE_VERSION: "0.2.0"
+       PACKAGE_VERSION: "0.3.0"
     runs-on: ubuntu-latest
     strategy:
       max-parallel: 4
