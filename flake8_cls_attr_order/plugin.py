@@ -17,6 +17,17 @@ CL200 = (
     'CL200 "{name}" @staticmethod is detected, '
     'should be converted to function'
 )
+CL201 = (
+    'CL201 wrong "{name}" class methods order. '
+    'Comply with @property, @classmethod, @staticmethod, instance methods. '
+    'Should be "{sv}"'
+)
+
+
+def to_line(indata: List[Tuple[str, int]], separator: str = ',') -> str:
+    return f'{separator} '.join(
+        sv if isinstance(sv, str) else sv[0] for sv in indata
+    )
 
 
 @dataclass
@@ -39,13 +50,45 @@ class ClassVisitor(ast.NodeVisitor):
             self._check_cls_name(node)
             self._check_cls_attrib_order(node)
             self._check_static_method(node)
+            self._check_methods_order(node)
+
+    def _check_methods_order(self, node: ast.ClassDef) -> None:
+        out = {}
+        targets = 'property', 'classmethod', 'staticmethod'
+        for attrib in node.body:  # type: _ast.stmt
+            if isinstance(attrib, ast.FunctionDef):
+                dec_list = attrib.decorator_list
+                if dec_list:
+                    for dec_obj in dec_list:
+                        if dec_obj.id in targets:
+                            out[attrib.name] = dec_obj.id
+                else:
+                    out[attrib.name] = 'instance'
+
+        def name_by_type(otype: str) -> List[str]:
+            return sorted(oid for oid, ttype in out.items() if ttype == otype)
+
+        exp_list = [
+            *name_by_type('property'),
+            *name_by_type('classmethod'),
+            *name_by_type('staticmethod'),
+            *name_by_type('instance'),
+        ]
+        if exp_list != list(out):
+            self._issues.append(
+                Issue(
+                    node.lineno,
+                    node.col_offset,
+                    message=CL201.format(name=node.name, sv=to_line(exp_list)),
+                )
+            )
 
     def _check_static_method(self, node: ast.ClassDef) -> None:
         for attrib in node.body:  # type: _ast.stmt
             if isinstance(attrib, ast.FunctionDef):
-                decorator_list = attrib.decorator_list
-                if decorator_list:
-                    for dec_obj in decorator_list:
+                dec_list = attrib.decorator_list
+                if dec_list:
+                    for dec_obj in dec_list:
                         if dec_obj.id == 'staticmethod':
                             self._issues.append(
                                 Issue(
@@ -66,9 +109,6 @@ class ClassVisitor(ast.NodeVisitor):
             )
 
     def _check_cls_attrib_order(self, node: ast.ClassDef) -> None:
-        def consts(indata: List[Tuple[str, int]], separator: str = ',') -> str:
-            return f'{separator} '.join(sv[0] for sv in indata)
-
         actual_const_line: List[Tuple[str, int]] = []
         for attrib in node.body:  # type: _ast.stmt
             if isinstance(attrib, (ast.Assign, ast.AnnAssign)):
@@ -85,7 +125,7 @@ class ClassVisitor(ast.NodeVisitor):
                     node.lineno,
                     node.col_offset,
                     message=CL101.format(
-                        name=node.name, sv=consts(sorted_const_line)
+                        name=node.name, sv=to_line(sorted_const_line)
                     ),
                 )
             )
