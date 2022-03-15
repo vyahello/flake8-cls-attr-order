@@ -70,17 +70,22 @@ class foo:
     @staticmethod
     def smethod(): ...
 
-    def imethod(self): ...
+    def bmethod(self): ...
+
+    def amethod(self): ...
 
     @property
-    def prop(self): ...
+    def pmethod(self): ...
+
+    @classmethod
+    def cmethod(cls): ...
 ```
 
 ```bash
 flake8 cls.py
 cls.py:1:1: CL100 "foo" class name should start with upper case letter
 cls.py:1:1: CL101 wrong "foo" class constants order, should be "ABRA, BAR"
-cls.py:1:1: CL201 wrong "foo" class methods order. Comply with @property, @classmethod, @staticmethod, instance methods. Should be "prop, smethod, imethod"
+cls.py:1:1: CL201 wrong "foo" class methods order. Comply with @property, @classmethod, @staticmethod, instance methods. Should be "pmethod, cmethod, smethod, amethod, bmethod"
 cls.py:6:5: CL200 "smethod" @staticmethod is detected, should be converted to function
 ```
 
